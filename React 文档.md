@@ -294,6 +294,35 @@ componentWillUnmount(){
 ### 4.	使用  React-Redux
 
 ```jsx
+//-----------重要代码-----------
+import {Provider} from 'react-redux'
+import store from './store';
+const App =(  // Provider 一个提供器  只要用了该组件 组件里面都可以使用store里面的数据
+    <Provider store={store}>
+        <TodoList />
+    </Provider>
+)
+// ---------重要代码-------------
+ReactDom.render(App,document.getElementById('root'))
 
+
+在组件内,引入 connect 连接器 更好的获取数据
+import {connect} from 'react-redux'
+const stateToProps = (state)=>{    // stateToProps 把之前state映射成组件的props属性,并返回
+    return {
+        inputValue : state.inputValue
+    }
+}
+
+const dispatchToProps = (dispatch) =>{  // 做另外一个映射,进行action的派发跟reducer的业务逻辑编写
+    return {
+        inputChange(e){
+            console.log(e.target.value)
+        }
+    }
+}   // 页面UI组件会提高性能
+export default connect(stateToProps,dispatchToProps)(TodoList);
+// connect的作用是把UI组件（无状态组件）和业务逻辑代码的分开，然后通过connect再链接到一起，
+// 让代码更加清晰和易于维护。这也是React-Redux最大的优点。
 ```
 
